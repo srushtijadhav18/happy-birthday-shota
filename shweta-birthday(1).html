@@ -379,6 +379,44 @@
     60% { transform: scale(1.05); }
     100% { opacity: 1; transform: scale(1); }
   }
+
+  /* Make a wish zone */
+  .wish-zone {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeSlideDown 1s ease 1s both;
+  }
+
+  .wish-stars {
+    font-size: 1.2rem;
+    color: var(--deep-blue);
+    opacity: 0.5;
+    letter-spacing: 8px;
+    animation: twinkleStars 2s ease-in-out infinite;
+  }
+  @keyframes twinkleStars {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.1); }
+  }
+
+  .wish-text {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    color: var(--deep-blue);
+    text-align: center;
+    min-height: 2.2rem;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    text-shadow: 1px 1px 0 white, 0 0 20px rgba(137,207,240,0.6);
+    padding: 0 16px;
+  }
+
+  .wish-text.fade-swap {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 </style>
 </head>
 <body>
@@ -402,15 +440,20 @@
 
 <!-- COUNTDOWN SCREEN -->
 <div id="countdown-screen">
-  <p class="pre-title">✨ counting down to ✨</p>
-  <h1 class="main-title">Shweta's <span class="name-highlight">Birthday!</span></h1>
-  <p class="subtitle">21 April is almost here bestie 🎀</p>
+  <p class="pre-title">🎂 it's your birthday shweta 🎂</p>
+  <h1 class="main-title">21 seconds <span class="name-highlight">just for you 🩵</span></h1>
+  <p class="subtitle">your day is HERE girlie 🎀 counting down just for you…</p>
   <div class="countdown-grid">
-    <div class="time-box"><span class="time-number" id="hours">00</span><span class="time-label">Hours</span></div>
-    <div class="time-box"><span class="time-number" id="minutes">00</span><span class="time-label">Minutes</span></div>
-    <div class="time-box"><span class="time-number" id="seconds">00</span><span class="time-label">Seconds</span></div>
+    <div class="time-box"><span class="time-number" id="seconds">21</span><span class="time-label">seconds ✨</span></div>
   </div>
-  <p style="color:#5a9bb5;font-weight:700;font-size:1rem;animation:fadeSlideDown 1s ease 0.8s both;opacity:0;">🎂 The cake is ready, the candles are lit…</p>
+  <p style="color:#5a9bb5;font-weight:700;font-size:1rem;animation:fadeSlideDown 1s ease 0.8s both;opacity:0;">🎂 21 seconds. your fav number. let's gooo 🩵</p>
+
+  <!-- Make a wish whimsical section -->
+  <div class="wish-zone">
+    <div class="wish-stars">✦ ✧ ✦</div>
+    <p class="wish-text" id="wishText">close your eyes…</p>
+    <div class="wish-stars">✦ ✧ ✦</div>
+  </div>
 </div>
 
 <!-- BIRTHDAY SCREEN -->
@@ -530,12 +573,11 @@
   <div class="message-card">
     <div class="message-from">💌 a note from srushti</div>
     <div class="message-text">
-      okay bestie, it's OFFICIALLY your day and i am NOT normal about it 🩵<br><br>
-      like fr fr, you are that girl. the one who makes every room warmer, every laugh louder, every vibe immaculate ✨ <span class="emoji-big">🫶</span><br><br>
-      you're my ride-or-die, my soulsister, my forever hype woman and i genuinely could not do life without you bestie no cap 💅<br><br>
-      this year is gonna be SO yours — we're eating, we're thriving, we're glowing up and we're doing it all together because that's just what we do 🎀<br><br>
+      okay shota bota, it's OFFICIALLY your day!! 🩵<br><br>
+      You are that girl. the one who makes every room warmer, every laugh louder, every vibe immaculate ✨ <span class="emoji-big">🫶</span><br><br>
+      i love growing up with you &amp; i have never had anyone like you 🎀<br><br>
       wishing you every single thing your heart wants — the big dreams, the cozy moments, the unexpectedly good days, and ALL the cake 🎂<br><br>
-      love you to the moon and back and then some more 🌙💙 you deserveeeee the world fr
+      love you to the moon and back and then some more 🌙💙 you deserveeeee the world, hbd to my forever fav star &lt;33
     </div>
     <div class="message-sign">— Srushti 🩵✨</div>
   </div>
@@ -543,32 +585,62 @@
 </div>
 
 <script>
-  // ---- COUNTDOWN ----
-  const birthday = new Date('2026-04-21T00:00:00');
+  // ---- 21 SECOND COUNTDOWN ----
+  let secondsLeft = 21;
+
+  const wishPhrases = [
+    "close your eyes…",
+    "take a deep breath 🌬️",
+    "think of something magical ✨",
+    "make a wish 🌟",
+    "hold it in your heart 🩵",
+    "the universe is listening…",
+    "wish with everything you've got 💫",
+    "almost there… 🎂",
+    "it's coming true ✦",
+    "3… 2… 1… 🎉"
+  ];
+
+  // map seconds to phrases (spread across 21→0)
+  function getWishPhrase(s) {
+    if (s >= 19) return wishPhrases[0];
+    if (s >= 17) return wishPhrases[1];
+    if (s >= 15) return wishPhrases[2];
+    if (s >= 13) return wishPhrases[3];
+    if (s >= 11) return wishPhrases[4];
+    if (s >= 9)  return wishPhrases[5];
+    if (s >= 7)  return wishPhrases[6];
+    if (s >= 5)  return wishPhrases[7];
+    if (s >= 3)  return wishPhrases[8];
+    return wishPhrases[9];
+  }
 
   function updateCountdown() {
-    const now = new Date();
-    const diff = birthday - now;
+    document.getElementById('seconds').textContent = String(secondsLeft).padStart(2, '0');
 
-    if (diff <= 0) {
+    // Update wish phrase with fade
+    const wishEl = document.getElementById('wishText');
+    const newPhrase = getWishPhrase(secondsLeft);
+    if (wishEl.textContent !== newPhrase) {
+      wishEl.classList.add('fade-swap');
+      setTimeout(() => {
+        wishEl.textContent = newPhrase;
+        wishEl.classList.remove('fade-swap');
+      }, 400);
+    }
+
+    if (secondsLeft <= 0) {
+      clearInterval(countdownInterval);
       showBirthday();
       return;
     }
-
-    const hours = Math.floor(diff / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-
-    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    secondsLeft--;
   }
 
   updateCountdown();
   const countdownInterval = setInterval(updateCountdown, 1000);
 
   function showBirthday() {
-    clearInterval(countdownInterval);
     document.getElementById('countdown-screen').style.display = 'none';
     const bday = document.getElementById('birthday-screen');
     bday.style.display = 'flex';
@@ -576,10 +648,6 @@
     setTimeout(launchConfetti, 1200);
     setTimeout(launchConfetti, 2400);
   }
-
-  // For preview: check if it's already past midnight April 21
-  const now = new Date();
-  if (now >= birthday) showBirthday();
 
   // ---- CANDLE BLOWING ----
   const flames = ['flame1','flame2','flame3','flame4','flame5'];
